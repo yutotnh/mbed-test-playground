@@ -20,16 +20,16 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-          
 
-      - 
+
+      -
         name: install dependencies
         shell: bash
         run: |
           pip install -U scancode-toolkit click
 
-      - 
-        name: license check 
+      -
+        name: license check
         run: |
           set -x
           mkdir -p SCANCODE
@@ -65,7 +65,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - 
+      -
         name: include check
         run: |
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
@@ -86,16 +86,16 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-    
-      - 
+
+      -
         name: UTF-8 Check
         run: |
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
           # Make sure we're not introducing any text which is not UTF-8 encoded
           git diff origin/${GITHUB_BASE_REF} -U0 | ( grep -a '^+' || true ) | ( ! grep -axv '.*' )
-          
 
-      - 
+
+      -
         name: astyle checks
         run: |
           set -x
@@ -118,8 +118,8 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-    
-      - 
+
+      -
         name: spell checks
         run: |
           set -x
@@ -129,7 +129,7 @@ jobs:
           ./tools/test/ci/doxy-spellchecker/spell.sh rtos .codecheckignore
           ./tools/test/ci/doxy-spellchecker/spell.sh connectivity/netsocket .codecheckignore
 
-      - 
+      -
         name: doxygen
         run: |
           set -x
@@ -169,7 +169,7 @@ jobs:
       -
         name: install dependencies
         run: |
-          pip install -r requirements.txt 
+          pip install -r requirements.txt
           pip install mock==2.0.0 attrs==19.1.0 pytest==3.3.0 'pylint>=1.9,<2' 'hypothesis>=3,<4' 'coverage>=4.5,<5'
 
       -
@@ -203,11 +203,11 @@ jobs:
           git diff --exit-code --diff-filter=d --color
 
   cmake-checks:
-    env: 
-      NAME: mbed-test-mode-check 
-      ROOT: tools/cmake/tests/mbed_test_mode/ 
-      TOOLCHAIN: GCC_ARM 
-      TARGET_NAME: K64F 
+    env:
+      NAME: mbed-test-mode-check
+      ROOT: tools/cmake/tests/mbed_test_mode/
+      TOOLCHAIN: GCC_ARM
+      TARGET_NAME: K64F
       PROFILE: develop
     runs-on: ubuntu-latest
     container:
@@ -228,8 +228,8 @@ jobs:
       -
         name: cmake unittest
         run: |
-          set -x     
-          ctest --build-and-test . build --build-generator Ninja --build-options -DBUILD_TESTING=ON -DCMAKE_BUILD_TYPE=Debug -DCOVERAGE=ON --test-command ctest        
+          set -x
+          ctest --build-and-test . build --build-generator Ninja --build-options -DBUILD_TESTING=ON -DCMAKE_BUILD_TYPE=Debug -DCOVERAGE=ON --test-command ctest
           gcovr --gcov-executable gcov -r . ./build -s -e ".*\.h" --exclude-directories=${GITHUB_WORKSPACE}/build/UNITTESTS --exclude-directories=${GITHUB_WORKSPACE}/build/_deps
           ccache -s
 
